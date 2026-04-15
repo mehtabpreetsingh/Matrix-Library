@@ -286,9 +286,10 @@ int main(){
 		Matrix *A = readMatrix(fin,n,n);
 	 	Matrix *L = createMatrix(n,n);
 	 	Matrix	*U = createMatrix(n,n);
+		Matrix	*P = createMatrix(n,n);
 		
-		luDecomposition(A, L, U);
-
+		luDecomposition(A, L, U, P);
+                
 		fprintf(fout,"L matrix:\n");
 		writeMatrixToFile(fout, L);
 
@@ -298,6 +299,7 @@ int main(){
 		freeMatrix(A);
 		freeMatrix(L);
 		freeMatrix(U);
+		freeMatrix(P);
 	}
 
 

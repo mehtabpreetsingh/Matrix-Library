@@ -1,0 +1,96 @@
+Operation: add
+6.00 8.00 
+10.00 12.00 
+
+Operation: det
+Determinant: 0.00
+
+Operation: det
+Not square matrix
+
+Operation: inv
+0.60 -0.70 
+-0.20 0.40 
+
+Operation: solve
+Result: Unique Solution
+x1 = 1.80
+x2 = 1.40
+
+Operation: trace
+trace is 15.00
+
+Operation: rank
+Rank is: 3
+
+Operation: identity
+Matrix is identity
+
+Operation: identity
+Not identity
+
+Operation: transpose
+1.00 4.00 
+2.00 5.00 
+3.00 6.00 
+
+Operation: sub
+9.00 8.00 
+7.00 6.00 
+
+Operation: mul
+58.00 64.00 
+139.00 154.00 
+
+Operation: det
+Determinant: -306.00
+
+Operation: inv
+0.60 -0.70 
+-0.20 0.40 
+
+Operation: trace
+trace is 101.00
+
+Operation: symmetric
+Matrix is Symmetric
+
+Operation: solve
+Result: Unique Solution
+x1 = 4.00
+x2 = 1.00
+x3 = 1.00
+
+Operation: saddle
+Saddle Point found at [0][0] with value: 5.00
+Saddle Point found at [0][1] with value: 5.00
+Saddle Point found at [1][0] with value: 5.00
+Saddle Point found at [1][1] with value: 5.00
+
+Operation: saddle
+Saddle Point found at [0][0] with value: 7.00
+
+Operation: solve
+Result: Infinite Solutions (Dependent System)
+
+Operation: solve
+Result: Unique Solution
+x1 = 1.00
+x2 = 2.00
+
+Operation: solve
+Result: Infinite Solutions (Dependent System)
+
+Operation: solve
+Result: No Solution (Inconsistent System)
+
+Operation: lu
+L matrix:
+1.00 0.00 0.00 
+0.00 1.00 0.00 
+0.00 0.00 1.00 
+U matrix:
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+0.00 0.00 0.00 
+

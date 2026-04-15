@@ -254,23 +254,41 @@ Matrix *inverse(Matrix *m){
 
 void gaussianElimination(Matrix *m){
     int n = m->rows;
+    int cols = m->cols;
 
-    for(int i=0; i<n; i++){
+    for(int i = 0; i < n && i < cols; i++){
+
+        // Find pivot (partial pivoting)
+        int maxRow = i;
+        for(int r = i + 1; r < n; r++){
+            if(fabs(m->data[r][i]) > fabs(m->data[maxRow][i])){
+                maxRow = r;
+            }
+        }
+
+        // Swap rows
+        if(maxRow != i){
+            double *temp = m->data[i];
+            m->data[i] = m->data[maxRow];
+            m->data[maxRow] = temp;
+        }
 
         double pivot = m->data[i][i];
-        if(pivot == 0) return;
+        if(fabs(pivot) < 1e-9) continue;
 
-        for(int j=0; j<m->cols; j++){
+        // Normalize row
+        for(int j = 0; j < cols; j++){
             m->data[i][j] /= pivot;
-	}
+        }
 
-        for(int k=0; k<n; k++){
+        // Eliminate other rows
+        for(int k = 0; k < n; k++){
             if(k == i) continue;
 
             double factor = m->data[k][i];
-            for(int j=0; j<m->cols; j++){
+            for(int j = 0; j < cols; j++){
                 m->data[k][j] -= factor * m->data[i][j];
-	    }
+            }
         }
     }
 }
@@ -362,47 +380,67 @@ void findSaddlePoint(Matrix *m, FILE *fout) {
 
 // ================ LU DECOMPOSITION =================
 
-void luDecomposition(Matrix *A, Matrix *L, Matrix *U){
-    int n = A->rows;
-    
-    // initialize L and U with 0
-    for(int i=0; i<n; i++){
-	for(int j=0; j<n; j++){
-		L->data[i][j] = 0;
-		U->data[i][j] = 0;
-	}
-    }
-    
-    for(int i=0; i<n; i++){
-
-	// ===== U MATRIX =====
-	for(int k=i; k<n; k++){
-		double sum = 0;
-		for(int j=0; j<i; j++)
-			sum += L->data[i][j] * U->data[j][k];
-
-		U->data[i][k] = A->data[i][k] - sum;
-	}
-	
-	// ===== L MATRIX =====
-	for(int k=i; k<n; k++){
-		if(i == k){
-			L->data[i][i] = 1; // diagonal = 1
-		} else{
-			double sum = 0;
-			for(int j=0; j<i; j++)
-				sum += L->data[k][j] * U->data[j][i];
-				
-			if (U->data[i][i] == 0) {
-				printf("LU not possible (division by zero)\n");
-				return;
-			}
-				
-			L->data[k][i] = (A->data[k][i] - sum) / U->data[i][i];
-	    }
-	}
-    }
+void swapRows(double **mat, int r1, int r2) {
+    double *temp = mat[r1];
+    mat[r1] = mat[r2];
+    mat[r2] = temp;
 }
 
+
+void luDecomposition(Matrix *A, Matrix *L, Matrix *U, Matrix *P){
+    int n = A->rows;
+
+    // Initialize
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < n; j++){
+            L->data[i][j] = 0;
+            U->data[i][j] = A->data[i][j]; // copy A into U
+            P->data[i][j] = (i == j) ? 1 : 0;
+        }
+    }
+
+    for(int i = 0; i < n; i++){
+
+        // ===== PARTIAL PIVOTING =====
+        int maxRow = i;
+        for(int k = i + 1; k < n; k++){
+            if(fabs(U->data[k][i]) > fabs(U->data[maxRow][i])){
+                maxRow = k;
+            }
+        }
+
+        // Swap if needed
+        if(maxRow != i){
+            swapRows(U->data, i, maxRow);
+            swapRows(P->data, i, maxRow);
+
+            for(int j = 0; j < i; j++){
+                double temp = L->data[i][j];
+                L->data[i][j] = L->data[maxRow][j];
+                L->data[maxRow][j] = temp;
+            }
+        }
+
+        double pivot = U->data[i][i];
+
+        // ⚠️ If pivot is ~0 → skip (IMPORTANT FIX)
+        if(fabs(pivot) < 1e-9){
+            L->data[i][i] = 1; // still keep diagonal valid
+            continue;
+        }
+
+        // ===== NORMAL CASE =====
+        L->data[i][i] = 1;
+
+        for(int k = i + 1; k < n; k++){
+            double factor = U->data[k][i] / pivot;
+            L->data[k][i] = factor;
+
+            for(int j = i; j < n; j++){
+                U->data[k][j] -= factor * U->data[i][j];
+            }
+        }
+    }
+}
 
 

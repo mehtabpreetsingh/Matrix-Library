@@ -37,7 +37,7 @@ int isIdentity(Matrix *m);
 int isSymmetric(Matrix *m);
 
 // ===== ROW OPERATIONS =====
-//void swapRows(Matrix *m, int r1, int r2);
+void swapRows(double **mat, int r1, int r2);
 //void scaleRow(Matrix *m, int r, double factor);
 //void addRowMultiple(Matrix *m, int src, int dest, double factor);
 
@@ -55,6 +55,6 @@ void gaussianElimination(Matrix *m);
 int matrixRank(Matrix *m);
 void findSaddlePoint(Matrix *m, FILE *fout);
 // ===== LU DECOMP =====
-void luDecomposition(Matrix *A, Matrix *L, Matrix *U);
+void luDecomposition(Matrix *A, Matrix *L, Matrix *U, Matrix *P);
 
 
