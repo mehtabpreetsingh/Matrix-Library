@@ -3,7 +3,7 @@
 #include <math.h>
 #include "matrix.h"
 
-// ================= CREATE & FREE =================
+// function for creating and free the matrix
 
 Matrix *createMatrix(int rows, int cols){
     Matrix *m = malloc(sizeof(Matrix));
@@ -27,7 +27,7 @@ void freeMatrix(Matrix *m){
     free(m);
 }
 
-// ================= PRINT =================
+// function for printing the matrix
 
 void printMatrix(Matrix *m){
     for(int i=0; i<m->rows; i++){
@@ -47,7 +47,7 @@ void writeMatrixToFile(FILE *fp, Matrix *m){
 	}
 }
 
-// ================= BASIC OPERATIONS =================
+// Basic operator (addition, subtraction, multiplication of two matrix)
 
 Matrix *addMatrix(Matrix *a, Matrix *b){
     Matrix *res = createMatrix(a->rows, a->cols);
@@ -83,7 +83,7 @@ Matrix *multiplyMatrix(Matrix *a, Matrix *b){
     return res;
 }
 
-// ================= TRANSFORMATIONS =================
+// Transformation of the matrix
 
 Matrix *transposeMatrix(Matrix *m){
     Matrix *t = createMatrix(m->cols, m->rows);
@@ -105,7 +105,7 @@ Matrix *scalarMultiply(Matrix *m, double k){
    return res;
 }
 
-// ================= UTILITIES =================
+// function used for other functions
 
 int isSquare(Matrix *m){
     return (m->rows == m->cols);
@@ -133,7 +133,7 @@ Matrix *copyMatrix(Matrix *m){
 	return copy;
 }
 
-// ================= SPECIAL MATRICES =================
+// Special matrix (Identity, symmetric )
 
 Matrix *identityMatrix(int n){
     Matrix *I = createMatrix(n, n);
@@ -170,7 +170,7 @@ int isSymmetric(Matrix *m){
     return 1;
 }
 
-// ================= DETERMINANT =================
+// Function to find dterminant
 
 Matrix *getMinor(Matrix *m, int row, int col){
     Matrix *minor = createMatrix(m->rows - 1, m->cols - 1);
@@ -210,7 +210,7 @@ double determinant(Matrix *m){
     return det;
 }
 
-// ================= COFACTOR & ADJOINT =================
+// function for Co-factor and Adjoint
 
 Matrix *cofactorMatrix(Matrix *m){
     Matrix *cof = createMatrix(m->rows, m->cols);
@@ -234,7 +234,7 @@ Matrix *adjointMatrix(Matrix *m){
     return adj;
 }
 
-// ================= INVERSE =================
+// Inverse of a matrix
 // using basic formula {inverse = adj(A) / det(A)}
 
 Matrix *inverse(Matrix *m){
@@ -250,7 +250,7 @@ Matrix *inverse(Matrix *m){
     return inv;
 }
 
-// ================== GAUSSIAN ELIMINATION =================
+// Gaussian elimination
 
 void gaussianElimination(Matrix *m){
     int n = m->rows;
@@ -258,7 +258,6 @@ void gaussianElimination(Matrix *m){
 
     for(int i = 0; i < n && i < cols; i++){
 
-        // Find pivot (partial pivoting)
         int maxRow = i;
         for(int r = i + 1; r < n; r++){
             if(fabs(m->data[r][i]) > fabs(m->data[maxRow][i])){
@@ -266,7 +265,6 @@ void gaussianElimination(Matrix *m){
             }
         }
 
-        // Swap rows
         if(maxRow != i){
             double *temp = m->data[i];
             m->data[i] = m->data[maxRow];
@@ -276,12 +274,10 @@ void gaussianElimination(Matrix *m){
         double pivot = m->data[i][i];
         if(fabs(pivot) < 1e-9) continue;
 
-        // Normalize row
         for(int j = 0; j < cols; j++){
             m->data[i][j] /= pivot;
         }
 
-        // Eliminate other rows
         for(int k = 0; k < n; k++){
             if(k == i) continue;
 
@@ -293,7 +289,7 @@ void gaussianElimination(Matrix *m){
     }
 }
 
-// ================= RANK ==================
+// rank of a matrix
 
 int matrixRank(Matrix *m){
     Matrix *temp = copyMatrix(m);
@@ -337,7 +333,7 @@ int matrixRank(Matrix *m){
     }
 
 
-// ============== SADDLE POINT ================
+// Function for finding saddle point in a matrix
 void findSaddlePoint(Matrix *m, FILE *fout) {
     int found = 0;
 
@@ -378,7 +374,7 @@ void findSaddlePoint(Matrix *m, FILE *fout) {
 }
 
 
-// ================ LU DECOMPOSITION =================
+// LU decomposition of a matrix
 
 void swapRows(double **mat, int r1, int r2) {
     double *temp = mat[r1];
@@ -394,14 +390,13 @@ void luDecomposition(Matrix *A, Matrix *L, Matrix *U, Matrix *P){
     for(int i = 0; i < n; i++){
         for(int j = 0; j < n; j++){
             L->data[i][j] = 0;
-            U->data[i][j] = A->data[i][j]; // copy A into U
+            U->data[i][j] = A->data[i][j];
             P->data[i][j] = (i == j) ? 1 : 0;
         }
     }
 
     for(int i = 0; i < n; i++){
 
-        // ===== PARTIAL PIVOTING =====
         int maxRow = i;
         for(int k = i + 1; k < n; k++){
             if(fabs(U->data[k][i]) > fabs(U->data[maxRow][i])){
@@ -409,7 +404,6 @@ void luDecomposition(Matrix *A, Matrix *L, Matrix *U, Matrix *P){
             }
         }
 
-        // Swap if needed
         if(maxRow != i){
             swapRows(U->data, i, maxRow);
             swapRows(P->data, i, maxRow);
@@ -423,13 +417,11 @@ void luDecomposition(Matrix *A, Matrix *L, Matrix *U, Matrix *P){
 
         double pivot = U->data[i][i];
 
-        // ⚠️ If pivot is ~0 → skip (IMPORTANT FIX)
         if(fabs(pivot) < 1e-9){
-            L->data[i][i] = 1; // still keep diagonal valid
+            L->data[i][i] = 1;
             continue;
         }
 
-        // ===== NORMAL CASE =====
         L->data[i][i] = 1;
 
         for(int k = i + 1; k < n; k++){

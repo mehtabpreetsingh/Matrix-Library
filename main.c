@@ -27,7 +27,7 @@ int main(){
 
     char op[20];
 
-    //multiple finction
+    //multiple function
     while(fscanf(fin, "%s", op) != EOF){
 
         fprintf(fout, "Operation: %s\n", op);
@@ -233,7 +233,6 @@ int main(){
         	}
     	}
 
-   	 // Perform Gaussian Elimination
     	gaussianElimination(G);
 
     	int noSolution = 0;
@@ -242,7 +241,6 @@ int main(){
     	for (int i = 0; i < n; i++) {
         	int allZerosLeft = 1;
 
-        // Check left side (coefficients)
         for (int j = 0; j < n; j++) {
             if (G->data[i][j] != 0) {
                 allZerosLeft = 0;
@@ -250,7 +248,6 @@ int main(){
             }
         }
 
-        // Check constant term
         if (allZerosLeft) {
             if (G->data[i][n] != 0) {
                 // 0 = non-zero → inconsistent
