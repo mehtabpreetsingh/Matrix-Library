@@ -49,21 +49,21 @@ solve
 
 ## Existing operation
 
-| Command  | Description |
-| ------------- |:-------------:|
-| add      | Adds two matrices of same dimensions.    |
-| sub      | Subtracts two matrices of same dimensions.     |
-| mul      | Multiplies two compatible matrices     |
-| det      | Calculates the determinant of a square matrix.     |
-| inv      | Finds the inverse matrix.     |
-| solve    | Solves a system of equations (Augmented Matrix).    |
-| rank     | Calculates the rank of the matrix.    |
-| saddle   | Finds all saddle points in the matrix.    |
-| identity | Checks if the matrix is an identity matrix.     |
-| trace    | Sum of the diagonal element   |
-| transpose| Transpose of a matrix    |
-| symmetric| Checks if the matrix is an symmetric matrix.     |
-| lu       | Decompose given matrix in upper and lower matrix.   |
+| Command  | Description | Defination|
+| ------------- |:---------:|:--------------------------:
+| add      | Adds two matrices of same dimensions.    |Matrix* addMatrix(Matrix *a, Matrix *b);|
+| sub      | Subtracts two matrices of same dimensions.     |Matrix* subtractMatrix(Matrix *a,Matrix *b);|
+| mul      | Multiplies two compatible matrices     |Matrix* multiplyMatrix(Matrix *a, Matrix *b);|
+| det      | Calculates the determinant of a square matrix.     |double determinant(Matrix *m);
+| inv      | Finds the inverse matrix.     |Matrix* inverse(Matrix *m);|
+| solve    | Solves a system of equations (Augmented Matrix).    |void gaussianElimination(Matrix *m);
+| rank     | Calculates the rank of the matrix.    |int matrixRank(Matrix *m);|
+| saddle   | Finds all saddle points in the matrix.    |void findSaddlePoint(Matrix *m, FILE *fout);
+| identity | Checks if the matrix is an identity matrix.     |int isIdentity(Matrix *m);
+| trace    | Sum of the diagonal element   |double trace(Matrix *m);
+| transpose| Transpose of a matrix    |Matrix* transposeMatrix(Matrix *m);|
+| symmetric| Checks if the matrix is an symmetric matrix.     |int isSymmetric(Matrix *m);
+| lu       | Decompose given matrix in upper and lower matrix.   |void luDecomposition(Matrix *A, Matrix *L, Matrix *U, Matrix *P);
 
 
 ## Project Structure
