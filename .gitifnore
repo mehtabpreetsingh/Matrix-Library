@@ -1,0 +1,17 @@
+# --- Compiled Binaries ---
+*.o
+*.a
+*.so
+*.exe
+*.out
+
+# --- Executables ---
+main_static
+main_dynamic
+matrix_tool
+
+# --- Output Files ---
+output.txt
+
+# --- System/IDE Files ---
+.DS_Store
